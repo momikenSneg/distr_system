@@ -1,38 +1,39 @@
 package nsu.fit.osm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 public class StAXProcessor implements AutoCloseable {
 
     private static final XMLInputFactory FACTORY = XMLInputFactory.newInstance();
-
     private final XMLStreamReader reader;
 
-    private Map<String, Integer> changes = new HashMap<>();
-    private Map<String, Integer> keys = new HashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(OSMReader.class);
 
-    public StAXProcessor(InputStream is) throws XMLStreamException {
+    private static final QName user = new QName("user");
+    private static final QName key = new QName("k");
+
+    StAXProcessor(InputStream is) throws XMLStreamException {
         reader = FACTORY.createXMLStreamReader(is);
     }
 
-    public void process() throws XMLStreamException {
-        QName user = new QName("user");
-        QName key = new QName("k");
+    OSMReader.OSMContainer process() throws XMLStreamException {
+        logger.info("Start process xml");
+        OSMReader.OSMContainer container = new OSMReader.OSMContainer();
         while (reader.hasNext()) {
             reader.next();
             if (reader.getEventType() == XMLEvent.START_ELEMENT){
                 if ("node".equals(reader.getLocalName())){
                     String value = getAttributeValue(user);
                     if (value != null)
-                        changes.compute(value, (k, v) -> v == null ? 1 : v + 1);
-
+                        container.addChange(value);
                     while (reader.hasNext()){
                         reader.next();
                         if (reader.getEventType() == XMLEvent.END_ELEMENT && "node".equals(reader.getLocalName())){
@@ -42,13 +43,15 @@ public class StAXProcessor implements AutoCloseable {
                             if ("tag".equals(reader.getLocalName())){
                                 value = getAttributeValue(key);
                                 if (value != null)
-                                    keys.compute(value, (k, v) -> v == null ? 1 : v + 1);
+                                    container.addKey(value);
                             }
                         }
                     }
                 }
             }
         }
+        logger.info("End process xml");
+        return container;
     }
 
     private String getAttributeValue(QName name){
