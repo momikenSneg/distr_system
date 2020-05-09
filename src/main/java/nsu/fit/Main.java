@@ -1,7 +1,8 @@
 package nsu.fit;
 
 import nsu.fit.osm.OSMReader;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,23 +19,16 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Option option = new Option("f", "file", true, "File name");
-        option.setArgs(1);
-        option.setArgName("file name ");
-        option.setRequired(true);
-        Options options = new Options();
-        options.addOption(option);
-        CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
         try {
-            cmd = parser.parse( options, args);
-        } catch (ParseException pe) {
-            pe.printStackTrace();
+            cmd = ArgsParser.parse(args);
+        } catch (ParseException e) {
+            logger.error("Wrong arguments", e);
+            System.out.println("Arguments: -f <file name>");
         }
 
-
         logger.info("Start read file");
-        try (InputStream bzIn = new BZip2CompressorInputStream(new FileInputStream(cmd.getOptionValue("f")))){
+        try (InputStream bzIn = new BZip2CompressorInputStream(new FileInputStream(cmd.getOptionValue("f")))) {
             OSMReader reader = new OSMReader();
             reader.read(bzIn);
             logger.info("Start print info");
@@ -42,7 +36,7 @@ public class Main {
             reader.printKeys();
         } catch (XMLStreamException e) {
             logger.error("XML read error", e);
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             logger.error("Wrong file name", e);
         }
 
