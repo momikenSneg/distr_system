@@ -6,7 +6,7 @@
 //
 
 
-package nsu.fit.jaxb.generated;
+package nsu.fit.osm.jaxb.generated;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -30,10 +30,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://openstreetmap.org/osm/0.6}member" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element ref="{http://openstreetmap.org/osm/0.6}tag" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}unsignedLong" />
+ *       &lt;attribute name="lat" type="{http://www.w3.org/2001/XMLSchema}double" />
+ *       &lt;attribute name="lon" type="{http://www.w3.org/2001/XMLSchema}double" />
  *       &lt;attribute name="user" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="uid" type="{http://www.w3.org/2001/XMLSchema}unsignedLong" />
  *       &lt;attribute name="visible" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -49,17 +50,19 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "member",
     "tag"
 })
-@XmlRootElement(name = "relation")
-public class Relation {
+@XmlRootElement(name = "node")
+public class Node {
 
-    protected List<Member> member;
     protected List<Tag> tag;
     @XmlAttribute(name = "id")
     @XmlSchemaType(name = "unsignedLong")
     protected BigInteger id;
+    @XmlAttribute(name = "lat")
+    protected Double lat;
+    @XmlAttribute(name = "lon")
+    protected Double lon;
     @XmlAttribute(name = "user")
     protected String user;
     @XmlAttribute(name = "uid")
@@ -76,35 +79,6 @@ public class Relation {
     @XmlAttribute(name = "timestamp")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar timestamp;
-
-    /**
-     * Gets the value of the member property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the member property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getMember().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Member }
-     * 
-     * 
-     */
-    public List<Member> getMember() {
-        if (member == null) {
-            member = new ArrayList<Member>();
-        }
-        return this.member;
-    }
 
     /**
      * Gets the value of the tag property.
@@ -157,6 +131,54 @@ public class Relation {
      */
     public void setId(BigInteger value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the lat property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Double }
+     *     
+     */
+    public Double getLat() {
+        return lat;
+    }
+
+    /**
+     * Sets the value of the lat property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Double }
+     *     
+     */
+    public void setLat(Double value) {
+        this.lat = value;
+    }
+
+    /**
+     * Gets the value of the lon property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Double }
+     *     
+     */
+    public Double getLon() {
+        return lon;
+    }
+
+    /**
+     * Sets the value of the lon property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Double }
+     *     
+     */
+    public void setLon(Double value) {
+        this.lon = value;
     }
 
     /**

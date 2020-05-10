@@ -6,4 +6,4 @@
 //
 
 @javax.xml.bind.annotation.XmlSchema(elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
-package nsu.fit.jaxb.generated;
+package nsu.fit.osm.jaxb.generated;

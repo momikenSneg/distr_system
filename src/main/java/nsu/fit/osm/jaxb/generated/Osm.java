@@ -6,7 +6,7 @@
 //
 
 
-package nsu.fit.jaxb.generated;
+package nsu.fit.osm.jaxb.generated;
 
 import java.util.ArrayList;
 import java.util.List;

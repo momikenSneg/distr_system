@@ -1,5 +1,7 @@
-package nsu.fit.osm;
+package nsu.fit.osm.stax;
 
+import nsu.fit.XMLProcessor;
+import nsu.fit.osm.OSMReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +12,7 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 
-public class StAXProcessor implements AutoCloseable {
+public class StAXProcessor implements AutoCloseable, XMLProcessor {
 
     private static final XMLInputFactory FACTORY = XMLInputFactory.newInstance();
     private final XMLStreamReader reader;
@@ -20,11 +22,11 @@ public class StAXProcessor implements AutoCloseable {
     private static final QName user = new QName("user");
     private static final QName key = new QName("k");
 
-    StAXProcessor(InputStream is) throws XMLStreamException {
+    public StAXProcessor(InputStream is) throws XMLStreamException {
         reader = FACTORY.createXMLStreamReader(is);
     }
 
-    OSMReader.OSMContainer process() throws XMLStreamException {
+    public OSMReader.OSMContainer process() throws XMLStreamException {
         logger.info("Start process xml");
         OSMReader.OSMContainer container = new OSMReader.OSMContainer();
         while (reader.hasNext()) {

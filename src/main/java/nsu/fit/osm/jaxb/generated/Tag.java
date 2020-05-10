@@ -6,14 +6,12 @@
 //
 
 
-package nsu.fit.jaxb.generated;
+package nsu.fit.osm.jaxb.generated;
 
-import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -26,7 +24,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="ref" type="{http://www.w3.org/2001/XMLSchema}unsignedLong" />
+ *       &lt;attribute name="k" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="v" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -36,35 +35,60 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "nd")
-public class Nd {
+@XmlRootElement(name = "tag")
+public class Tag {
 
-    @XmlAttribute(name = "ref")
-    @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger ref;
+    @XmlAttribute(name = "k")
+    protected String k;
+    @XmlAttribute(name = "v")
+    protected String v;
 
     /**
-     * Gets the value of the ref property.
+     * Gets the value of the k property.
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link String }
      *     
      */
-    public BigInteger getRef() {
-        return ref;
+    public String getK() {
+        return k;
     }
 
     /**
-     * Sets the value of the ref property.
+     * Sets the value of the k property.
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link String }
      *     
      */
-    public void setRef(BigInteger value) {
-        this.ref = value;
+    public void setK(String value) {
+        this.k = value;
+    }
+
+    /**
+     * Gets the value of the v property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getV() {
+        return v;
+    }
+
+    /**
+     * Sets the value of the v property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setV(String value) {
+        this.v = value;
     }
 
 }
