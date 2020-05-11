@@ -98,7 +98,7 @@ public class Osm {
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getNode().add(newItem);
+     *    getElement().add(newItem);
      * </pre>
      * 
      * 

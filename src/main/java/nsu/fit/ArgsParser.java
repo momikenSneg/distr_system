@@ -29,4 +29,9 @@ class ArgsParser {
     static Options getOptions() {
         return options;
     }
+
+    public static void printHelp(){
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp( "distr-1.0.jar [OPTIONS]", ArgsParser.getOptions() );
+    }
 }

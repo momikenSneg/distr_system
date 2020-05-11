@@ -3,7 +3,6 @@ package nsu.fit.osm.jaxb;
 import nsu.fit.XMLProcessor;
 import nsu.fit.osm.OSMReader;
 import nsu.fit.osm.jaxb.generated.Node;
-import nsu.fit.osm.jaxb.generated.Osm;
 import nsu.fit.osm.jaxb.generated.Tag;
 
 import javax.xml.bind.JAXBContext;
@@ -45,16 +44,6 @@ public class JAXBProcessor implements XMLProcessor {
             }
 
         }
-
-        System.out.println("Soooooka");
-
-//        List<Node> nodes = osm.getNode();
-//
-//        nodes.forEach(e -> {
-//            container.addChange(e.getUser());
-//            List<Tag> tags = e.getTag();
-//            tags.forEach(t -> container.addKey(t.getK()));
-//        });
         return container;
     }
 
