@@ -1,10 +1,14 @@
 package nsu.fit.osm.stax;
 
-import nsu.fit.XMLProcessor;
+import nsu.fit.osm.XMLProcessor;
 import nsu.fit.osm.OSMReader;
+import nsu.fit.osm.jaxb.generated.Node;
+import nsu.fit.osm.jaxb.generated.Relation;
+import nsu.fit.osm.jaxb.generated.Way;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -26,8 +30,8 @@ public class StAXProcessor implements AutoCloseable, XMLProcessor {
         reader = FACTORY.createXMLStreamReader(is);
     }
 
-    public OSMReader.OSMContainer process() throws XMLStreamException {
-        logger.info("Start process xml");
+    public OSMReader.OSMContainer processCount() throws XMLStreamException {
+        logger.info("Start processCount xml");
         OSMReader.OSMContainer container = new OSMReader.OSMContainer();
         while (reader.hasNext()) {
             reader.next();
@@ -52,8 +56,23 @@ public class StAXProcessor implements AutoCloseable, XMLProcessor {
                 }
             }
         }
-        logger.info("End process xml");
+        logger.info("End processCount xml");
         return container;
+    }
+
+    @Override
+    public Node getNode() throws XMLStreamException, JAXBException {
+        return null;
+    }
+
+    @Override
+    public Way getWay() throws XMLStreamException, JAXBException {
+        return null;
+    }
+
+    @Override
+    public Relation getRelation() throws XMLStreamException, JAXBException {
+        return null;
     }
 
     private String getAttributeValue(QName name){

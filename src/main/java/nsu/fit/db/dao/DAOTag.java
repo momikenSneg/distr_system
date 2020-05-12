@@ -106,31 +106,32 @@ public class DAOTag {
         }
     }
 
-    public void insertBatchNodeTag(List<MTag> element, Map<MNode, Long> ids) throws SQLException {
+    public void insertBatchNodeTag(List<MTag> element, Map<MTag, Long> ids) throws SQLException {
         insertBatchTag(element, ids, SQL_INSERT_TAG_NODE, SQL_INSERT_NODE_REL);
     }
 
-    public void insertBatchWayTag(List<MTag> element, Map<MNode, Long> ids) throws SQLException {
+    public void insertBatchWayTag(List<MTag> element, Map<MTag, Long> ids) throws SQLException {
         insertBatchTag(element, ids, SQL_INSERT_TAG_WAY, SQL_INSERT_WAY_REL);
     }
 
-    public void insertBatchRelationTag(List<MTag> element, Map<MNode, Long> ids) throws SQLException {
+    public void insertBatchRelationTag(List<MTag> element, Map<MTag, Long> ids) throws SQLException {
         insertBatchTag(element, ids, SQL_INSERT_TAG_RELATION, SQL_INSERT_RELATION_REL);
     }
 
-    private void insertBatchTag(List<MTag> element, Map<MNode, Long> ids, String sql, String sqlE) throws SQLException {
+    private void insertBatchTag(List<MTag> element, Map<MTag, Long> ids, String sql, String sqlE) throws SQLException {
         PreparedStatement statement = JDBCPostgreSQL.getConnection().prepareStatement(sql);
         PreparedStatement statementRel = JDBCPostgreSQL.getConnection().prepareStatement(sqlE);
-        for (MTag tag: element){
-            MTag dbTag = getElementByValue(tag.getK(), tag.getV());
+
+        for (Map.Entry<MTag, Long> entry: ids.entrySet()){
+            MTag dbTag = getElementByValue(entry.getKey().getK(), entry.getKey().getV());
             if (dbTag == null){
-                statement.setString(1, tag.getK());
-                statement.setString(2, tag.getV());
-                statement.setLong(3, ids.get(tag));
+                statement.setString(1, entry.getKey().getK());
+                statement.setString(2, entry.getKey().getV());
+                statement.setLong(3, entry.getValue());
                 statement.addBatch();
             } else {
-                statementRel.setLong(1, ids.get(tag));
-                statementRel.setLong(2, dbTag.getId());
+                statementRel.setLong(1, ids.get(entry.getKey()));
+                statementRel.setLong(2, entry.getValue());
                 statementRel.addBatch();
             }
 
