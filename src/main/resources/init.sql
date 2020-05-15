@@ -30,24 +30,24 @@ CREATE TABLE Relation(
 );
 
 CREATE TABLE Node_tag(
-  node_id INT NOT NULL,
-  tag_id INT NOT NULL,
+  node_id BIGINT NOT NULL,
+  tag_id BIGINT NOT NULL,
   PRIMARY KEY (node_id, tag_id),
   FOREIGN KEY (node_id) REFERENCES Node(id) ON DELETE CASCADE,
   FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Way_tag(
-  way_id INT NOT NULL,
-  tag_id INT NOT NULL,
+  way_id BIGINT NOT NULL,
+  tag_id BIGINT NOT NULL,
   PRIMARY KEY (way_id, tag_id),
   FOREIGN KEY (way_id) REFERENCES Way(id) ON DELETE CASCADE,
   FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Relation_tag(
-  relation_id INT NOT NULL,
-  tag_id INT NOT NULL,
+  relation_id BIGINT NOT NULL,
+  tag_id BIGINT NOT NULL,
   PRIMARY KEY (relation_id, tag_id),
   FOREIGN KEY (relation_id) REFERENCES Relation(id) ON DELETE CASCADE,
   FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE

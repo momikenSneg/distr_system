@@ -22,8 +22,8 @@ public class DAOWay implements DAO<MWay> {
     public void insert(MWay element) throws SQLException {
         Statement statement = JDBCPostgreSQL.getConnection().createStatement();
         String sql = "insert into Way(id, username) " +
-                "values (" + element.getId() + ", " +
-                element.getUsername() + ")";
+                "values (" + element.getId() + ", " + "'" +
+                element.getUsername() + "'" + ")";
         statement.execute(sql);
     }
 
@@ -44,6 +44,6 @@ public class DAOWay implements DAO<MWay> {
             statement.setString(2, way.getUsername());
             statement.addBatch();
         }
-        statement.execute();
+        statement.executeBatch();
     }
 }

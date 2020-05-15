@@ -1,14 +1,12 @@
 package nsu.fit.db.dao;
 
 import nsu.fit.db.JDBCPostgreSQL;
-import nsu.fit.db.model.MNode;
 import nsu.fit.db.model.MTag;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.Map;
 
 public class DAOTag {
@@ -42,6 +40,7 @@ public class DAOTag {
     }
 
     public void insertNodeTag(MTag element, long nodeId) throws SQLException {
+
         MTag dbTag = getElementByValue(element.getK(), element.getV());
         Statement statement = JDBCPostgreSQL.getConnection().createStatement();
         if (dbTag == null){
@@ -106,19 +105,19 @@ public class DAOTag {
         }
     }
 
-    public void insertBatchNodeTag(List<MTag> element, Map<MTag, Long> ids) throws SQLException {
-        insertBatchTag(element, ids, SQL_INSERT_TAG_NODE, SQL_INSERT_NODE_REL);
+    public void insertBatchNodeTag(Map<MTag, Long> ids) throws SQLException {
+        insertBatchTag(ids, SQL_INSERT_TAG_NODE, SQL_INSERT_NODE_REL);
     }
 
-    public void insertBatchWayTag(List<MTag> element, Map<MTag, Long> ids) throws SQLException {
-        insertBatchTag(element, ids, SQL_INSERT_TAG_WAY, SQL_INSERT_WAY_REL);
+    public void insertBatchWayTag(Map<MTag, Long> ids) throws SQLException {
+        insertBatchTag(ids, SQL_INSERT_TAG_WAY, SQL_INSERT_WAY_REL);
     }
 
-    public void insertBatchRelationTag(List<MTag> element, Map<MTag, Long> ids) throws SQLException {
-        insertBatchTag(element, ids, SQL_INSERT_TAG_RELATION, SQL_INSERT_RELATION_REL);
+    public void insertBatchRelationTag(Map<MTag, Long> ids) throws SQLException {
+        insertBatchTag(ids, SQL_INSERT_TAG_RELATION, SQL_INSERT_RELATION_REL);
     }
 
-    private void insertBatchTag(List<MTag> element, Map<MTag, Long> ids, String sql, String sqlE) throws SQLException {
+    private void insertBatchTag(Map<MTag, Long> ids, String sql, String sqlE) throws SQLException {
         PreparedStatement statement = JDBCPostgreSQL.getConnection().prepareStatement(sql);
         PreparedStatement statementRel = JDBCPostgreSQL.getConnection().prepareStatement(sqlE);
 
@@ -131,12 +130,12 @@ public class DAOTag {
                 statement.addBatch();
             } else {
                 statementRel.setLong(1, ids.get(entry.getKey()));
-                statementRel.setLong(2, entry.getValue());
+                statementRel.setLong(2, dbTag.getId());
                 statementRel.addBatch();
             }
 
-            statement.execute();
-            statementRel.execute();
+            statement.executeBatch();
+            statementRel.executeBatch();
         }
     }
 
@@ -161,8 +160,8 @@ public class DAOTag {
     }
 
     private String getInsertNodeString(String k, String v, long node_id){
-        return "WITH rowss AS (INSERT INTO Tag(k, v) values (" + k +
-                ", " + v + ") returning id) INSERT INTO Node_tag (node_id, tag_id) values (" + node_id + ", (SELECT id FROM rowss));";
+        return "WITH rowss AS (INSERT INTO Tag(k, v) values (" + "'" + k + "'" +
+                ", " + "'" + v + "'" + ") returning id) INSERT INTO Node_tag (node_id, tag_id) values (" + node_id + ", (SELECT id FROM rowss));";
     }
 
     private String getInsertRelNode(long tag_id, long node_id){
@@ -170,8 +169,8 @@ public class DAOTag {
     }
 
     private String getInsertWayString(String k, String v, long way_id){
-        return "WITH rowss AS (INSERT INTO Tag(k, v) values (" + k +
-                ", " + v + ") returning id) INSERT INTO Way_tag (way_id, tag_id) values (" + way_id + ", (SELECT id FROM rowss));";
+        return "WITH rowss AS (INSERT INTO Tag(k, v) values (" + "'" + k + "'" +
+                ", " + "'" + v + "'" + ") returning id) INSERT INTO Way_tag (way_id, tag_id) values (" + way_id + ", (SELECT id FROM rowss));";
     }
 
     private String getInsertRelWay(long tag_id, long way_id) {
@@ -179,8 +178,8 @@ public class DAOTag {
     }
 
     private String getInsertRelationString(String k, String v, long relation_id){
-        return "WITH rowss AS (INSERT INTO Tag(k, v) values (" + k +
-                ", " + v + ") returning id) INSERT INTO Relation_tag (relation_id, tag_id) values (" + relation_id + ", (SELECT id FROM rowss));";
+        return "WITH rowss AS (INSERT INTO Tag(k, v) values (" + "'" + k + "'" +
+                ", " + "'" + v + "'" + ") returning id) INSERT INTO Relation_tag (relation_id, tag_id) values (" + relation_id + ", (SELECT id FROM rowss));";
     }
 
     private String getInsertRelRelation(long tag_id, long relation_id){

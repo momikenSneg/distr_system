@@ -37,8 +37,8 @@ public class DAONode implements DAO<MNode> {
         String sql = "insert into Node(id, lon, lat, username) " +
                 "values (" + element.getId() + ", " +
                 element.getLon() + ", " +
-                element.getLat() + ", " +
-                element.getUsername() + ")";
+                element.getLat() + ", " + "'" +
+                element.getUsername() + "'" + ")";
 
         statement.execute(sql);
     }
@@ -65,7 +65,7 @@ public class DAONode implements DAO<MNode> {
 
             statement.addBatch();
         }
-        statement.execute();
+        statement.executeBatch();
     }
 
 }

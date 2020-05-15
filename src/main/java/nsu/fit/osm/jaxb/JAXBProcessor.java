@@ -1,5 +1,6 @@
 package nsu.fit.osm.jaxb;
 
+import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 import nsu.fit.osm.XMLProcessor;
 import nsu.fit.osm.OSMReader;
 import nsu.fit.osm.jaxb.generated.Node;
@@ -27,6 +28,7 @@ public class JAXBProcessor implements XMLProcessor {
     private Unmarshaller unmarshallerRelation;
 
     public JAXBProcessor(InputStream in) throws JAXBException, XMLStreamException {
+        //FACTORY.setProperty("escapeCharacters", false);
         JAXBContext jcNode = JAXBContext.newInstance(Node.class);
         JAXBContext jcWay = JAXBContext.newInstance(Way.class);
         JAXBContext jcRelation = JAXBContext.newInstance(Relation.class);
@@ -58,7 +60,11 @@ public class JAXBProcessor implements XMLProcessor {
     public Node getNode() throws XMLStreamException, JAXBException {
         while (reader.hasNext()){
             if(reader.getEventType() == XMLEvent.START_ELEMENT && "node".equals(reader.getLocalName())){
-                return (Node) unmarshallerNode.unmarshal(reader);
+                Node node = (Node) unmarshallerNode.unmarshal(reader);
+                if (node.getId().longValue() == 300361675){
+                    System.out.println(node.getLat());
+                }
+                return node;
             }
             if(reader.getEventType() == XMLEvent.START_ELEMENT && "way".equals(reader.getLocalName())){
                 return null;
@@ -86,6 +92,7 @@ public class JAXBProcessor implements XMLProcessor {
             if(reader.getEventType() == XMLEvent.START_ELEMENT && "relation".equals(reader.getLocalName())){
                 return (Relation) unmarshallerRelation.unmarshal(reader);
             }
+            reader.next();
         }
         return null;
     }

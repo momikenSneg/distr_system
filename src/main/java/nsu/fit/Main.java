@@ -1,7 +1,9 @@
 package nsu.fit;
 
 import nsu.fit.db.JDBCPostgreSQL;
+import nsu.fit.db.Service;
 import nsu.fit.osm.OSMReader;
+import nsu.fit.osm.XMLProcessor;
 import nsu.fit.osm.jaxb.JAXBProcessor;
 import nsu.fit.osm.stax.StAXProcessor;
 import org.apache.commons.cli.CommandLine;
@@ -14,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -36,13 +37,23 @@ public class Main {
             return;
         }
 
-        try {
-            fillDataBase();
+        String fileName = cmd.hasOption("f1") ? cmd.getOptionValue("f1") : cmd.getOptionValue("f2");
+
+
+        try (InputStream bzIn = new BZip2CompressorInputStream(new FileInputStream(fileName))){
+            JDBCPostgreSQL.connect();
+            XMLProcessor processor = cmd.hasOption("f1") ? new StAXProcessor(bzIn) : new JAXBProcessor(bzIn);
+            OSMReader reader = new OSMReader(processor);
+            Service service = new Service(reader);
+            service.putBatch();
+
+        } catch (JAXBException e) {
+            logger.error("Not creating JAXBContainer", e);
+        } catch (XMLStreamException e) {
+            logger.error("XML read error", e);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        String fileName = cmd.hasOption("f1") ? cmd.getOptionValue("f1") : cmd.getOptionValue("f2");
 
 //        logger.info("Start read file");
 //        try (InputStream bzIn = new BZip2CompressorInputStream(new FileInputStream(fileName))) {

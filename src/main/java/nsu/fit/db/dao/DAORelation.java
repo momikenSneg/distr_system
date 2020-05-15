@@ -32,8 +32,8 @@ public class DAORelation implements DAO<MRelation>{
     public void insert(MRelation element) throws SQLException {
         Statement statement = JDBCPostgreSQL.getConnection().createStatement();
         String sql = "insert into Relation(id, username) " +
-                "values (" + element.getId() + ", " +
-                element.getUsername() + ")";
+                "values (" + element.getId() + ", " + "'" +
+                element.getUsername() + "'" + ")";
         statement.execute(sql);
     }
 
@@ -54,6 +54,6 @@ public class DAORelation implements DAO<MRelation>{
             statement.setString(2, relation.getUsername());
             statement.addBatch();
         }
-        statement.execute();
+        statement.executeBatch();
     }
 }

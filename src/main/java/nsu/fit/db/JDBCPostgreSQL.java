@@ -27,10 +27,16 @@ public class JDBCPostgreSQL implements AutoCloseable {
         Statement statement = connection.createStatement();
         statement.execute(sql);
         statement.closeOnCompletion();
+
+        connection.setAutoCommit(false);
     }
 
     public static Connection getConnection() {
         return connection;
+    }
+
+    static void commit() throws SQLException {
+        connection.commit();
     }
 
     @Override

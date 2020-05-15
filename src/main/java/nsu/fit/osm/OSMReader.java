@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("Duplicates")
 public class OSMReader {
 
     private OSMContainer container;
@@ -48,9 +49,12 @@ public class OSMReader {
     public ElementTagContainer<MNode> getNode() throws JAXBException, XMLStreamException {
         ElementTagContainer<MNode> nodes = new ElementTagContainer<>();
         Node node = processor.getNode();
-        nodes.addElement(convertNode(node));
-        for (Tag tag: node.getTag()){
-            nodes.addTag(convertTag(tag), node.getId().longValue());
+        if (node != null){
+            nodes.addElement(convertNode(node));
+            for (Tag tag: node.getTag()){
+                nodes.addTag(convertTag(tag), node.getId().longValue());
+            }
+            return nodes;
         }
         return nodes;
     }
@@ -60,8 +64,16 @@ public class OSMReader {
         for (int i = 0; i < amount; i++){
             Node node = processor.getNode();
             if (node != null){
+                if (node.getUser().contains("'")){
+                    String s = node.getUser().replaceAll("'", "");
+                    node.setUser(s);
+                }
                 nodes.addElement(convertNode(node));
                 for (Tag tag: node.getTag()){
+                    if (tag.getV().contains("'")){
+                        String s = tag.getV().replaceAll("'", "");
+                        tag.setV(s);
+                    }
                     nodes.addTag(convertTag(tag), node.getId().longValue());
                 }
             } else {
@@ -74,9 +86,12 @@ public class OSMReader {
     public ElementTagContainer<MWay> getWay() throws JAXBException, XMLStreamException {
         ElementTagContainer<MWay> ways = new ElementTagContainer<>();
         Way way = processor.getWay();
-        ways.addElement(convertWay(way));
-        for (Tag tag: way.getTag()){
-            ways.addTag(convertTag(tag), way.getId().longValue());
+        if (way != null){
+            ways.addElement(convertWay(way));
+            for (Tag tag: way.getTag()){
+                ways.addTag(convertTag(tag), way.getId().longValue());
+            }
+            return ways;
         }
         return ways;
     }
@@ -86,8 +101,16 @@ public class OSMReader {
         for (int i = 0; i < amount; i++){
             Way way = processor.getWay();
             if (way != null){
+                if (way.getUser().contains("'")){
+                    String s = way.getUser().replaceAll("'", "");
+                    way.setUser(s);
+                }
                 ways.addElement(convertWay(way));
                 for (Tag tag: way.getTag()){
+                    if (tag.getV().contains("'")){
+                        String s = tag.getV().replaceAll("'", "");
+                        tag.setV(s);
+                    }
                     ways.addTag(convertTag(tag), way.getId().longValue());
                 }
             } else {
@@ -100,20 +123,31 @@ public class OSMReader {
     public ElementTagContainer<MRelation> getRelation() throws JAXBException, XMLStreamException {
         ElementTagContainer<MRelation> relations = new ElementTagContainer<>();
         Relation relation = processor.getRelation();
-        relations.addElement(convertRelation(relation));
-        for (Tag tag: relation.getTag()){
-            relations.addTag(convertTag(tag), relation.getId().longValue());
+        if (relation != null){
+            relations.addElement(convertRelation(relation));
+            for (Tag tag: relation.getTag()){
+                relations.addTag(convertTag(tag), relation.getId().longValue());
+            }
+            return relations;
         }
         return relations;
     }
 
-    public ElementTagContainer<MRelation> getrelations(int amount) throws JAXBException, XMLStreamException {
+    public ElementTagContainer<MRelation> getRelations(int amount) throws JAXBException, XMLStreamException {
         ElementTagContainer<MRelation> relations = new ElementTagContainer<>();
         for (int i = 0; i < amount; i++){
             Relation relation = processor.getRelation();
             if (relation != null){
+                if (relation.getUser().contains("'")){
+                    String s = relation.getUser().replaceAll("'", "");
+                    relation.setUser(s);
+                }
                 relations.addElement(convertRelation(relation));
                 for (Tag tag: relation.getTag()){
+                    if (tag.getV().contains("'")){
+                        String s = tag.getV().replaceAll("'", "");
+                        tag.setV(s);
+                    }
                     relations.addTag(convertTag(tag), relation.getId().longValue());
                 }
             } else {
