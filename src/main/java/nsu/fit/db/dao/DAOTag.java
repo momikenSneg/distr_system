@@ -16,13 +16,13 @@ public class DAOTag {
 
     private static final String SQL_GET_BY_VALUES = "select * from Tag where k = ? and v = ?; ";
 
-    private static final String SQL_INSERT_TAG_NODE = "WITH rowss AS (INSERT INTO Tag(k, v) values (?, ?) returning id) INSERT INTO Node_tag (node_id, tag_id) values (?, (SELECT id FROM rowss));";
-    private static final String SQL_INSERT_TAG_WAY = "WITH rowss AS (INSERT INTO Tag(k, v) values (?, ?) returning id) INSERT INTO Way_tag (way_id, tag_id) values (?, (SELECT id FROM rowss));";
-    private static final String SQL_INSERT_TAG_RELATION = "WITH rowss AS (INSERT INTO Tag(k, v) values (?, ?) returning id) INSERT INTO Relation_tag (relation_id, tag_id) values (?, (SELECT id FROM rowss));";
+    private static final String SQL_INSERT_TAG_NODE = "WITH rowss AS (INSERT INTO Tag(k, v) values (?, ?) returning id) INSERT INTO Node_tag (nodes_id, tags_id) values (?, (SELECT id FROM rowss));";
+    private static final String SQL_INSERT_TAG_WAY = "WITH rowss AS (INSERT INTO Tag(k, v) values (?, ?) returning id) INSERT INTO Way_tag (ways_id, tags_id) values (?, (SELECT id FROM rowss));";
+    private static final String SQL_INSERT_TAG_RELATION = "WITH rowss AS (INSERT INTO Tag(k, v) values (?, ?) returning id) INSERT INTO Relation_tag (relations_id, tags_id) values (?, (SELECT id FROM rowss));";
 
-    private static final String SQL_INSERT_NODE_REL = "insert into Node_tag(node_id, tag_id) values (?, ?);";
-    private static final String SQL_INSERT_WAY_REL = "insert into Way_tag(way_id, tag_id) values (?, ?);";
-    private static final String SQL_INSERT_RELATION_REL = "insert into Relation_tag(relation_id, tag_id) values (?, ?);";
+    private static final String SQL_INSERT_NODE_REL = "insert into Node_tag(nodes_id, tags_id) values (?, ?);";
+    private static final String SQL_INSERT_WAY_REL = "insert into Way_tag(ways_id, tags_id) values (?, ?);";
+    private static final String SQL_INSERT_RELATION_REL = "insert into Relation_tag(relations_id, tags_id) values (?, ?);";
 
 
     public MTag getElement(long tagId) throws SQLException {
@@ -161,28 +161,28 @@ public class DAOTag {
 
     private String getInsertNodeString(String k, String v, long node_id){
         return "WITH rowss AS (INSERT INTO Tag(k, v) values (" + "'" + k + "'" +
-                ", " + "'" + v + "'" + ") returning id) INSERT INTO Node_tag (node_id, tag_id) values (" + node_id + ", (SELECT id FROM rowss));";
+                ", " + "'" + v + "'" + ") returning id) INSERT INTO Node_tag (nodes_id, tags_id) values (" + node_id + ", (SELECT id FROM rowss));";
     }
 
     private String getInsertRelNode(long tag_id, long node_id){
-        return "insert into Node_tag(node_id, tag_id) values (" + node_id + ", " + tag_id + ");";
+        return "insert into Node_tag(nodes_id, tags_id) values (" + node_id + ", " + tag_id + ");";
     }
 
     private String getInsertWayString(String k, String v, long way_id){
         return "WITH rowss AS (INSERT INTO Tag(k, v) values (" + "'" + k + "'" +
-                ", " + "'" + v + "'" + ") returning id) INSERT INTO Way_tag (way_id, tag_id) values (" + way_id + ", (SELECT id FROM rowss));";
+                ", " + "'" + v + "'" + ") returning id) INSERT INTO Way_tag (ways_id, tags_id) values (" + way_id + ", (SELECT id FROM rowss));";
     }
 
     private String getInsertRelWay(long tag_id, long way_id) {
-        return "insert into Way_tag(way_id, tag_id) values (" + way_id + ", " + tag_id + ");";
+        return "insert into Way_tag(ways_id, tags_id) values (" + way_id + ", " + tag_id + ");";
     }
 
     private String getInsertRelationString(String k, String v, long relation_id){
         return "WITH rowss AS (INSERT INTO Tag(k, v) values (" + "'" + k + "'" +
-                ", " + "'" + v + "'" + ") returning id) INSERT INTO Relation_tag (relation_id, tag_id) values (" + relation_id + ", (SELECT id FROM rowss));";
+                ", " + "'" + v + "'" + ") returning id) INSERT INTO Relation_tag (relations_id, tags_id) values (" + relation_id + ", (SELECT id FROM rowss));";
     }
 
     private String getInsertRelRelation(long tag_id, long relation_id){
-        return "insert into Relation_tag(relation_id, tag_id) values (" + relation_id + ", " + tag_id + ");";
+        return "insert into Relation_tag(relations_id, tags_id) values (" + relation_id + ", " + tag_id + ");";
     }
 }

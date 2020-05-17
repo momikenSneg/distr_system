@@ -1,7 +1,13 @@
 package nsu.fit;
 
+import nsu.fit.db.HibernateUtils;
 import nsu.fit.db.JDBCPostgreSQL;
 import nsu.fit.db.Service;
+import nsu.fit.db.jparepos.NodeRepository;
+import nsu.fit.db.model.MNode;
+import nsu.fit.db.model.MRelation;
+import nsu.fit.db.model.MTag;
+import nsu.fit.db.model.MWay;
 import nsu.fit.osm.OSMReader;
 import nsu.fit.osm.XMLProcessor;
 import nsu.fit.osm.jaxb.JAXBProcessor;
@@ -40,20 +46,42 @@ public class Main {
         String fileName = cmd.hasOption("f1") ? cmd.getOptionValue("f1") : cmd.getOptionValue("f2");
 
 
-        try (InputStream bzIn = new BZip2CompressorInputStream(new FileInputStream(fileName))){
-            JDBCPostgreSQL.connect();
-            XMLProcessor processor = cmd.hasOption("f1") ? new StAXProcessor(bzIn) : new JAXBProcessor(bzIn);
-            OSMReader reader = new OSMReader(processor);
-            Service service = new Service(reader);
-            service.putBatch();
+        //MNode node = new MNode(1, 1.1, 1.2, "kek");
 
-        } catch (JAXBException e) {
-            logger.error("Not creating JAXBContainer", e);
-        } catch (XMLStreamException e) {
-            logger.error("XML read error", e);
-        } catch (SQLException e) {
-            e.printStackTrace();
+//        HibernateUtils.getEm().getTransaction().begin();
+//        HibernateUtils.getEm().persist(node);
+        MTag tag = HibernateUtils.getEm().find(MTag.class, (long)(101));
+//        HibernateUtils.getEm().getTransaction().commit();
+        System.out.println("Tag " + tag.getK() + " " + tag.getV());
+        for (MNode node: tag.getNodes()){
+            System.out.println("Node " + node.getLon() + " " + node.getLat());
         }
+        for (MWay way: tag.getWays()){
+            System.out.println("Way " + way.getId() + " " + way.getUsername());
+        }
+        for (MRelation relation: tag.getRelations()){
+            System.out.println("Relation " + relation.getId() + " " + relation.getUsername());
+        }
+        HibernateUtils.getEm().close();
+
+        System.out.println("");
+
+
+
+//        try (InputStream bzIn = new BZip2CompressorInputStream(new FileInputStream(fileName))){
+//            JDBCPostgreSQL.connect();
+//            XMLProcessor processor = cmd.hasOption("f1") ? new StAXProcessor(bzIn) : new JAXBProcessor(bzIn);
+//            OSMReader reader = new OSMReader(processor);
+//            Service service = new Service(reader);
+//            service.putBatch();
+//
+//        } catch (JAXBException e) {
+//            logger.error("Not creating JAXBContainer", e);
+//        } catch (XMLStreamException e) {
+//            logger.error("XML read error", e);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
 //        logger.info("Start read file");
 //        try (InputStream bzIn = new BZip2CompressorInputStream(new FileInputStream(fileName))) {
