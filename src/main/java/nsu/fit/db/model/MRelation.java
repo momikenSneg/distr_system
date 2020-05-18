@@ -13,6 +13,7 @@ import java.util.Set;
 @Table(name = "Relation")
 public class MRelation {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
     @Column(name = "username")
@@ -26,4 +27,11 @@ public class MRelation {
         this.id = id;
         this.username = username;
     }
+
+    public MRelation (RRelation relation){
+        id = relation.getId();
+        username = relation.getUsername();
+        relation.getTags().forEach( (k,v) -> tags.add(new MTag(k, v)));
+    }
+
 }

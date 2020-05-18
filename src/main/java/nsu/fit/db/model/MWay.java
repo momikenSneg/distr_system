@@ -2,7 +2,6 @@ package nsu.fit.db.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ import java.util.List;
 @Table(name = "Way")
 public class MWay {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
     @Column(name = "username")
@@ -27,4 +27,11 @@ public class MWay {
         this.id = id;
         this.username = username;
     }
+
+    public MWay (RWay way){
+        id = way.getId();
+        username = way.getUsername();
+        way.getTags().forEach( (k,v) -> tags.add(new MTag(k, v)));
+    }
+
 }

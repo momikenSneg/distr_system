@@ -2,6 +2,7 @@ package nsu.fit.db.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,7 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "tag")
 public class MTag {
+    //    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
+    @SequenceGenerator(name="identifier", sequenceName="mytable_id_seq", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="identifier")
     @Column(name = "id")
     private long id;
     @Column (name = "k")
@@ -28,6 +33,11 @@ public class MTag {
 
     public MTag(long id, String k, String v) {
         this.id = id;
+        this.k = k;
+        this.v = v;
+    }
+
+    public MTag(String k, String v) {
         this.k = k;
         this.v = v;
     }
