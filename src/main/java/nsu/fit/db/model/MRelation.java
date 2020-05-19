@@ -13,9 +13,9 @@ import java.util.Set;
 @Table(name = "Relation")
 public class MRelation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private long id;
+    private Long id;
     @Column(name = "username")
     private String username;
     @ManyToMany(cascade=CascadeType.ALL)

@@ -13,9 +13,9 @@ import java.util.List;
 @Table(name = "node")
 public class MNode {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column (name = "id")
-    private long id;
+    private Long id;
     @Column (name = "lon")
     private double lon;
     @Column (name = "lat")
@@ -35,7 +35,7 @@ public class MNode {
     }
 
     public MNode (RNode node){
-        id = node.getId();
+        //id = node.getId();
         lon = node.getLongitude();
         lat = node.getLatitude();
         username = node.getUsername();

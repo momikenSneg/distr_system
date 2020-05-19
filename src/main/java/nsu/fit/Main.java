@@ -42,7 +42,6 @@ public class Main {
 
         String fileName = cmd.hasOption("f1") ? cmd.getOptionValue("f1") : cmd.getOptionValue("f2");
 
-
         switch (cmd.getOptions()[0].getOpt()) {
             case "f1":
             case "f2-1":
@@ -103,6 +102,8 @@ public class Main {
 //        HibernateUtils.getEm().close();
 
     }
+
+
 
 }
 

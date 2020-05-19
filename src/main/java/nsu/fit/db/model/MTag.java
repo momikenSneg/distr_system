@@ -19,7 +19,7 @@ public class MTag {
     @SequenceGenerator(name="identifier", sequenceName="mytable_id_seq", allocationSize=1)
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="identifier")
     @Column(name = "id")
-    private long id;
+    private Long id;
     @Column (name = "k")
     private String k;
     @Column (name = "v")

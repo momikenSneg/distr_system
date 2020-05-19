@@ -13,9 +13,9 @@ import java.util.List;
 @Table(name = "Way")
 public class MWay {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private long id;
+    private Long id;
     @Column(name = "username")
     private String username;
     @ManyToMany(cascade=CascadeType.ALL)
